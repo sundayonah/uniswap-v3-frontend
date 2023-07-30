@@ -3,15 +3,22 @@ import './App.css';
 import { ethers } from 'ethers';
 import PageButton from './components/PageButton';
 import ConnectButton from './components/ConnectButton';
+import { GearFill } from 'react-bootstrap-icons';
+import ConfigModal from './components/ConfigModal';
 
 function App() {
   const [provider, setProvider] = useState(undefined);
   const [signer, setSigner] = useState(undefined);
   const [signerAddress, setSignerAddress] = useState(undefined);
 
+  const [showModal, setShowModal] = useState(undefined);
+  const [deadlineMinutes, setDeadlineMinutes] = useState(10);
+  const [slippageAmount, setSlippageAmount] = useState(2);
+
   useEffect(() => {
        const onLoad = async () => {
         const provider = await new ethers.providers.Web3Provider(window.ethereum)
+        setProvider(provider)
        }
        onLoad()
   }, []);
@@ -32,10 +39,10 @@ const getWalletAddress = () => {
       //todo: connect weth and uni contracts address
    })
 }
-
 if (signer !== undefined) {
   getWalletAddress()
 }
+
 
   return (
     <div className="App">
@@ -56,8 +63,27 @@ if (signer !== undefined) {
              />
           </div>
           <div className='my-2 buttonContainer'>
-          <PageButton name={"..."} />
-             
+          <PageButton name={"..."} isBold={true}/>
+          </div>
+        </div>
+       </div>
+
+       <div className='appBody'>
+        <div className='swapContainer'>
+          <div className='swapHeader'>
+            <span className='swapText'>Swap</span>
+            <span className='gearContainer' onClick={() => setShowModal(true)}>
+              <GearFill />
+            </span>
+             {showModal && (
+                <ConfigModal 
+                 onClose={() => setShowModal(false)}
+                 setDeadlineMinutes={setDeadlineMinutes}
+                 deadlineMinutes={deadlineMinutes}
+                 setSlippageAmount={setSlippageAmount}
+                 slippageAmount={slippageAmount}
+                />
+             )}
           </div>
         </div>
        </div>

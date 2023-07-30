@@ -2,7 +2,7 @@ import React from 'react'
 import PageButton  from './PageButton'
 
 const ConnectButton = ({isConnected, signerAddress, getSigner, provider}) => {
-    const displayAddress = `${signerAddress?.substring(0,5)}...${signerAddress?.substring(35,39)}`
+    const displayAddress = `${signerAddress?.substring(0,5)}...${signerAddress?.substring(37,42)}`
   return (
     <>
     {isConnected() ? (
