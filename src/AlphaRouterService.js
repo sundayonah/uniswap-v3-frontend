@@ -15,12 +15,14 @@ const router = new AlphaRouter({ chainId: chainId, provider: web3Provider })
 const name0 = 'Wrapped Ether'
 const symbol0 = 'WETH'
 const decimals0 = 18
-const address0 = '0xEe01c0CD76354C383B8c7B4e65EA88D00B06f36f'
+const address0 = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
 
 const name1 = 'Uniswap Token'
 const symbol1 = 'UNI'
 const decimals1 = 18
 const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+
+//chainlink contract address 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
 
  //its a little unintuitive but when you want to find out how much of a token in a wallet you make request to that token contract to get the amount
 
@@ -45,6 +47,8 @@ const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
         deadline: deadline
     }
   )
+
+  console.log(route)
 
   const transaction = {
      data: route.methodParameters.calldata,
@@ -74,4 +78,4 @@ const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
       )
 
       signer.sendTransacttion(transaction)
- }
+    }
