@@ -20,10 +20,10 @@ function App() {
   const [deadlineMinutes, setDeadlineMinutes] = useState(10)
   const [showModal, setShowModal] = useState(undefined)
 
-  const [inputAmount, setInputAmount] = useState(undefined)
-  const [outputAmount, setOutputAmount] = useState(undefined)
+  const [inputAmount, setInputAmount] = useState(null);
+  const [outputAmount, setOutputAmount] = useState(null);  
   const [transaction, setTransaction] = useState(undefined)
-  const [loading, setLoading] = useState(undefined)
+  const [loading, setLoading] = useState(false)
   const [ratio, setRatio] = useState(undefined)
   const [wethContract, setWethContract] = useState(undefined)
   const [uniContract, setUniContract] = useState(undefined)
@@ -49,95 +49,51 @@ function App() {
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     setSigner(signer)
-    return signer
+    // return signer
   }
   const isConnected = () => signer !== undefined
   
-  // const getWalletAddress = () => {
-  //   signer.getAddress()
-  //     .then(address => {
-  //       setSignerAddress(address)
+  const getWalletAddress = () => {
+    signer.getAddress()
+      .then(address => {
+        setSignerAddress(address)
 
-  //       // todo: connect weth and uni contracts
-  //       wethContract.balanceOf(address)
-  //         .then(res => {
-  //           setWethAmount( Number(ethers.utils.formatEther(res)) )
-  //         })
-  //       uniContract.balanceOf(address)
-  //         .then(res => {
-  //           setUniAmount( Number(ethers.utils.formatEther(res)) )
-  //         })
+        // todo: connect weth and uni contracts
+        wethContract.balanceOf(address)
+          .then(res => {
+            setWethAmount( Number(ethers.utils.formatEther(res)) )
+          })
+        uniContract.balanceOf(address)
+          .then(res => {
+            setUniAmount( Number(ethers.utils.formatEther(res)) )
+          })
 
-  //     })
-  // }
-
-  const getWalletAddress = async () => {
-      const address = await signer.getAddress();
-      setSignerAddress(address);
-
-      console.log('Account Address', address)
-    
-      // todo: connect weth and uni contracts
-      const wethBalance = await wethContract.balanceOf(address);
-      setWethAmount(Number(ethers.utils.formatEther(wethBalance)));
-    
-      console.log(wethBalance.toString())
-
-      const uniBalance = await uniContract.balanceOf(address);
-      setUniAmount(Number(ethers.utils.formatEther(uniBalance)));
-
-      console.log(uniBalance.toString())
-
-      };
-
+      })
+  }
 
   if (signer !== undefined) {
     getWalletAddress()
   }
 
-  // const getSwapPrice = (inputAmount) => {
-  //   setLoading(true)
-  //   setInputAmount(inputAmount)
+const getSwapPrice = (inputAmount) => {
+  setLoading(true);
+  setInputAmount(inputAmount); 
 
-  //   const swap = getPrice(
-  //     inputAmount,
-  //     slippageAmount,
-  //     Math.floor(Date.now()/1000 + (deadlineMinutes * 60)),
-  //     signerAddress
-  //   ).then(data => {
-  //     setTransaction(data[0])
-  //     setOutputAmount(data[1])
-  //     setRatio(data[2])
-  //     setLoading(false)
-  //   })
-  // }
-
-
-  const getSwapPrice = (inputAmount) => {
-    // Ensure inputAmount is a valid number before proceeding
-    const parsedInputAmount = parseFloat(inputAmount);
-    if (isNaN(parsedInputAmount)) {
-      console.error("Invalid inputAmount:", inputAmount);
-      return;
-    }
-  
-    setLoading(true);
-    setInputAmount(parsedInputAmount); // Update with the parsed value
-  
-    const swap = getPrice(
-      parsedInputAmount, // Use the parsed value
+  const swap =   getPrice(
+      inputAmount,
       slippageAmount,
-      Math.floor(Date.now() / 1000 + deadlineMinutes * 60),
+      Math.floor(Date.now()/1000 + (deadlineMinutes * 60)),
       signerAddress
-    ).then((data) => {
-      setTransaction(data[0]);
-      setOutputAmount(data[1]);
-      setRatio(data[2]);
-      setLoading(false);
-    });
-  };
-  
+    ).then(data => {
+      setTransaction(data[0])
+      setOutputAmount(data[1])
+      setRatio(data[2])
+      setLoading(false)
 
+    })
+    console.log(swap)
+  }
+ 
   return (
     <div className="App">
       <div className="appNav">
@@ -184,6 +140,7 @@ function App() {
             <CurrencyField
               field="input"
               tokenName="WETH"
+              value={inputAmount} // Pass the inputAmount as the value prop
               getSwapPrice={getSwapPrice}
               signer={signer}
               balance={wethAmount} />

@@ -9,7 +9,7 @@ const REACT_APP_INFURA_URL_TESTNET = process.env.REACT_APP_INFURA_URL_TESTNET
 
 const chainId = 5;
 
-const web3Provider = new ethers.providers.JsonRpcProvider(REACT_APP_INFURA_URL_TESTNET)
+const web3Provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/1f9136b294e248fca6fce6f5c95a0811')
 const router = new AlphaRouter({ chainId: chainId, provider: web3Provider })
 
 const name0 = 'Wrapped Ether'
@@ -35,19 +35,27 @@ const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
  export const getPrice = async (inputAmount, slippageAmount, deadline, walletAddress) => {
   const percentSlippage = new Percent(slippageAmount, 100)
   const wei = ethers.utils.parseUnits(inputAmount.toString(), decimals0)
-  const currencyAmount = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei))
+  const currencyAmount = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei.toString()))
+
+  console.log(wei.toString())
+  console.log(currencyAmount)
 
   const route  = await router.route(
-    currencyAmount,
+    currencyAmount.toExact(),
     UNI,
     TradeType.EXACT_INPUT,
     {
         recipient: walletAddress,
-        slippageTolerance: percentSlippage,
-        deadline: deadline
+        slippageTolerance: percentSlippage.toSignificant(6),
+        deadline: Math.floor(Date.now() / 1000)+10*60 // addded 10 minutes
     }
   )
 
+  // const options: SwapOptions = {
+  //   slippageTolerance: new Percent(50, 10_000), // 50 bips, or 0.50%
+  //   deadline: Math.floor(Date.now() / 1000) + 60 * 20, // 20 minutes from the current Unix time
+  //   recipient: walletAddress,
+  // }
   console.log(route)
 
   const transaction = {
@@ -77,5 +85,5 @@ const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
         approvalAmount
       )
 
-      signer.sendTransacttion(transaction)
+      signer.sendTransaction(transaction)
     }
