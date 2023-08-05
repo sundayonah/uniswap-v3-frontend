@@ -1,89 +1,165 @@
-const {AlphaRouter} = require('@uniswap/smart-order-router')
-const { Token, CurrencyAmount, TradeType, Percent} = require ('@uniswap/sdk-core')
-const {ethers, BigNumber} = require('ethers')
-const JSBI = require('jsbi')
-const ERC20ABI = require('./abi.json')
+// const {AlphaRouter} = require('@uniswap/smart-order-router')
+// const { Token, CurrencyAmount, TradeType, Percent} = require ('@uniswap/sdk-core')
+// const {ethers, BigNumber} = require('ethers')
+// const JSBI = require('jsbi')
+// const ERC20ABI = require('./abi.json')
 
-const V3_SWAP_ROUTER_ADDRESS = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
-const REACT_APP_INFURA_URL_TESTNET = process.env.REACT_APP_INFURA_URL_TESTNET
+// const V3_SWAP_ROUTER_ADDRESS = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
+// const REACT_APP_INFURA_URL_TESTNET = process.env.REACT_APP_INFURA_URL_TESTNET
+
+// const chainId = 5;
+
+// const web3Provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/1f9136b294e248fca6fce6f5c95a0811')
+// const router = new AlphaRouter({ chainId: chainId, provider: web3Provider })
+
+// const name0 = 'Wrapped Ether'
+// const symbol0 = 'WETH'
+// const decimals0 = 18
+// const address0 = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
+
+// const name1 = 'Uniswap Token'
+// const symbol1 = 'UNI'
+// const decimals1 = 18
+// const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+
+// //chainlink contract address 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
+
+//  //its a little unintuitive but when you want to find out how much of a token in a wallet you make request to that token contract to get the amount
+
+//  const WETH = new Token(chainId, address0, decimals0, symbol0, name0)
+//  const UNI = new Token(chainId, address1, decimals1, symbol1, name1)
+
+//  export const getWethContract = () => new ethers.Contract(address0, ERC20ABI, web3Provider)
+//  export const getUniContract = () => new ethers.Contract(address1, ERC20ABI, web3Provider)
+
+//  export const getPrice = async (inputAmount, slippageAmount, deadline, walletAddress) => {
+//   const percentSlippage = new Percent(slippageAmount, 10)
+//   const wei = ethers.utils.parseUnits(inputAmount, decimals0).toString()
+//   const currencyAmount = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei))
+
+//   console.log(wei)
+//   console.log(currencyAmount)
+//   console.log(WETH)
+  
+//   const route  = await router.route(
+//     currencyAmount,
+//     UNI,
+//     TradeType.EXACT_INPUT,
+//     {
+//       recipient: walletAddress,
+//       slippageTolerance: percentSlippage,
+//       deadline: Math.floor(Date.now() / 1000) + 60 * 10, // addded 10 minutes
+//     }
+//   )
+//   console.log(route())
+
+//   const transaction = {
+//      data: route.methodParameters.calldata,
+//      to: V3_SWAP_ROUTER_ADDRESS,
+//      value: BigNumber.from(route.methodParameters.value),
+//      from: walletAddress,
+//      gasPrice: BigNumber.from(route.gasPriceWei),
+//      gasLimit: ethers.utils.hexlify(1000000),
+//   }
+
+//   const quoteAmountOut = route.quote.toFixed(6)
+//   const ratio = (inputAmount / quoteAmountOut).toFixed(3)
+
+//   return [
+//     transaction,
+//     quoteAmountOut,
+//     ratio,
+//   ]
+//  }
+
+//  export const runSwap = async (transaction, signer) => {
+//       const approvalAmount = ethers.utils.parseUnits('10', 18).toString()
+//       const contract0 = getUniContract()
+//       await contract0.connect(signer).approve(
+//         V3_SWAP_ROUTER_ADDRESS,
+//         approvalAmount
+//       )
+
+//       signer.sendTransaction(transaction)
+//     }
+
+
+
+const { AlphaRouter } = require('@uniswap/smart-order-router');
+const { Token, CurrencyAmount, TradeType, Percent } = require('@uniswap/sdk-core');
+const { ethers, BigNumber } = require('ethers');
+const JSBI = require('jsbi');
+const ERC20ABI = require('./abi.json');
+
+const V3_SWAP_ROUTER_ADDRESS = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45';
+const REACT_APP_INFURA_URL_TESTNET = process.env.REACT_APP_INFURA_URL_TESTNET;
 
 const chainId = 5;
 
-const web3Provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/1f9136b294e248fca6fce6f5c95a0811')
-const router = new AlphaRouter({ chainId: chainId, provider: web3Provider })
+const web3Provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/1f9136b294e248fca6fce6f5c95a0811');
+const router = new AlphaRouter({ chainId: chainId, provider: web3Provider });
 
-const name0 = 'Wrapped Ether'
-const symbol0 = 'WETH'
-const decimals0 = 18
-const address0 = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6'
+const name0 = 'Wrapped Ether';
+const symbol0 = 'WETH';
+const decimals0 = 18;
+const address0 = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6';
 
-const name1 = 'Uniswap Token'
-const symbol1 = 'UNI'
-const decimals1 = 18
-const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+const name1 = 'Uniswap Token';
+const symbol1 = 'UNI';
+const decimals1 = 18;
+const address1 = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984';
 
-//chainlink contract address 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
+const WETH = new Token(chainId, address0, decimals0, symbol0, name0);
+const UNI = new Token(chainId, address1, decimals1, symbol1, name1);
 
- //its a little unintuitive but when you want to find out how much of a token in a wallet you make request to that token contract to get the amount
+export const getWethContract = () => new ethers.Contract(address0, ERC20ABI, web3Provider);
+export const getUniContract = () => new ethers.Contract(address1, ERC20ABI, web3Provider);
 
- const WETH = new Token(chainId, address0, decimals0, symbol0, name0)
- const UNI = new Token(chainId, address1, decimals1, symbol1, name1)
+export const getPrice = async (inputAmount, slippageAmount, deadline, walletAddress) => {
+  const percentSlippage = new Percent(slippageAmount, 10);
+  const wei = ethers.utils.parseUnits(inputAmount, decimals0).toString();
+  const currencyAmount = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei));
 
- export const getWethContract = () => new ethers.Contract(address0, ERC20ABI, web3Provider)
- export const getUniContract = () => new ethers.Contract(address1, ERC20ABI, web3Provider)
+  console.log(wei);
+  console.log(currencyAmount);
+  console.log(WETH);
 
- export const getPrice = async (inputAmount, slippageAmount, deadline, walletAddress) => {
-  const percentSlippage = new Percent(slippageAmount, 100)
-  const wei = ethers.utils.parseUnits(inputAmount.toString(), decimals0)
-  const currencyAmount = CurrencyAmount.fromRawAmount(WETH, JSBI.BigInt(wei.toString()))
+  const options = {
+    recipient: walletAddress,
+    slippageTolerance: percentSlippage,
+    deadline: Math.floor(Date.now() / 1000) + 60 * 10,
+    type: TradeType.EXACT_INPUT,
+  };
 
-  console.log(wei.toString())
-  console.log(currencyAmount)
+  const route = await router.route(currencyAmount, UNI, options);
+  // console.log(router.route());
 
-  const route  = await router.route(
-    currencyAmount.toExact(),
-    UNI,
-    TradeType.EXACT_INPUT,
-    {
-        recipient: walletAddress,
-        slippageTolerance: percentSlippage.toSignificant(6),
-        deadline: Math.floor(Date.now() / 1000)+10*60 // addded 10 minutes
-    }
-  )
+const transaction = {
+  data: route.methodParameters?.calldata,
+  to: V3_SWAP_ROUTER_ADDRESS,
+  value: route?.methodParameters?.value,
+  from: walletAddress,
+  gasPrice: route.gasPriceWei,
+  gasLimit: ethers.utils.hexlify(1000000),
+};
 
-  // const options: SwapOptions = {
-  //   slippageTolerance: new Percent(50, 10_000), // 50 bips, or 0.50%
-  //   deadline: Math.floor(Date.now() / 1000) + 60 * 20, // 20 minutes from the current Unix time
-  //   recipient: walletAddress,
-  // }
-  console.log(route)
-
-  const transaction = {
-     data: route.methodParameters.calldata,
-     to: V3_SWAP_ROUTER_ADDRESS,
-     value: BigNumber.from(route.methodParameters.value),
-     from: walletAddress,
-     gasPrice: BigNumber.from(route.gasPriceWei),
-     gasLimit: ethers.utils.hexlify(1000000),
-  }
-
-  const quoteAmountOut = route.quote.toFixed(6)
-  const ratio = (inputAmount / quoteAmountOut).toFixed(3)
+  const quoteAmountOut = route.quote.toFixed(6);
+  const ratio = (inputAmount / quoteAmountOut).toFixed(3);
 
   return [
     transaction,
     quoteAmountOut,
     ratio,
-  ]
- }
+  ];
+};
 
- export const runSwap = async (transaction, signer) => {
-      const approvalAmount = ethers.utils.parseUnits('10', 18).toString()
-      const contract0 = getUniContract()
-      await contract0.connect(signer).approve(
-        V3_SWAP_ROUTER_ADDRESS,
-        approvalAmount
-      )
+export const runSwap = async (transaction, signer) => {
+  const approvalAmount = ethers.utils.parseUnits('10', 18).toString();
+  const contract0 = getUniContract();
+  await contract0.connect(signer).approve(
+    V3_SWAP_ROUTER_ADDRESS,
+    approvalAmount
+  );
 
-      signer.sendTransaction(transaction)
-    }
+  await signer.sendTransaction(transaction);
+};

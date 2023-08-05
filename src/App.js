@@ -20,8 +20,8 @@ function App() {
   const [deadlineMinutes, setDeadlineMinutes] = useState(10)
   const [showModal, setShowModal] = useState(undefined)
 
-  const [inputAmount, setInputAmount] = useState(null);
-  const [outputAmount, setOutputAmount] = useState(null);  
+  const [inputAmount, setInputAmount] = useState('');
+  const [outputAmount, setOutputAmount] = useState('');  
   const [transaction, setTransaction] = useState(undefined)
   const [loading, setLoading] = useState(false)
   const [ratio, setRatio] = useState(undefined)
@@ -40,7 +40,6 @@ function App() {
 
       const uniContract = getUniContract()
       setUniContract(uniContract)
-
     }
     onLoad()
   }, [])
@@ -67,7 +66,6 @@ function App() {
           .then(res => {
             setUniAmount( Number(ethers.utils.formatEther(res)) )
           })
-
       })
   }
 
@@ -75,24 +73,25 @@ function App() {
     getWalletAddress()
   }
 
-const getSwapPrice = (inputAmount) => {
-  setLoading(true);
-  setInputAmount(inputAmount); 
-
-  const swap =   getPrice(
+  const getSwapPrice = (inputAmount) => {
+    setLoading(true);
+    setInputAmount(inputAmount);
+  
+    getPrice(
       inputAmount,
       slippageAmount,
-      Math.floor(Date.now()/1000 + (deadlineMinutes * 60)),
-      signerAddress
+      Math.floor(Date.now() / 1000 + (deadlineMinutes * 60)),
+      signerAddress,
     ).then(data => {
       setTransaction(data[0])
       setOutputAmount(data[1])
       setRatio(data[2])
       setLoading(false)
-
-    })
-    console.log(swap)
-  }
+  
+      console.log(data);
+      
+    });
+  };
  
   return (
     <div className="App">
@@ -141,9 +140,11 @@ const getSwapPrice = (inputAmount) => {
               field="input"
               tokenName="WETH"
               value={inputAmount} // Pass the inputAmount as the value prop
+              onChange={value => setInputAmount(value)} // Add this line
               getSwapPrice={getSwapPrice}
               signer={signer}
               balance={wethAmount} />
+
             <CurrencyField
               field="output"
               tokenName="UNI"
@@ -179,10 +180,8 @@ const getSwapPrice = (inputAmount) => {
               </div>
             )}
           </div>
-
         </div>
       </div>
-
     </div>
   );
 }
