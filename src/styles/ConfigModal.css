@@ -1,0 +1,82 @@
+.modaly {
+  position: absolute;
+  right: 0;
+  left: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 300;
+}
+
+.modal-content {
+  background-color: #fff;
+  max-width: 300px !important;
+  width: 80% !important;
+  padding: 7px 25px 10px;
+  background-color: #2c74b3 !important;
+  border: 1px solid rgb(206, 208, 217) !important;
+  border-radius: 12px !important;
+  font-family: sans-serif;
+  transition: 1s;
+}
+
+.titlehead {
+  font-weight: bold;
+  font-size: 14px !important;
+  color: rgb(213, 0, 102) !important;
+}
+
+.labelField {
+  line-height: 30px;
+}
+
+.inputField {
+  padding-right: 10px;
+  border-radius: 15px !important;
+  border: 1px solid black;
+  height: 2rem;
+  margin: 3px 0;
+  width: 100%;
+  text-align: right;
+  display: inline-flex;
+  color: black;
+  font-weight: bold;
+}
+:focus {
+  outline: none;
+}
+
+.autoButton {
+  display: inline;
+  padding: 1px 10px;
+  border: none;
+  background-color: #174b8f;
+  color: white;
+  margin-right: 10px;
+  border-radius: 15px;
+}
+
+.fieldContainer {
+  display: flex;
+  padding-left: 0px !important;
+}
+
+.inputFieldUnitsContainer {
+  margin-top: 8px;
+  padding-left: 5px !important;
+  padding-top: 14x;
+  display: inline-flex;
+  font-weight: bold;
+}
+
+.unitMinute {
+  margin-right: 47px;
+}
+
+/* @media (max-width: 540px){
+    .modaly{
+        top: -100px;
+        right: 0;
+    }
+} */
