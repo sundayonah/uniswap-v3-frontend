@@ -168,11 +168,11 @@ function App() {
                 slippageAmount={slippageAmount}
               />
             )}
-
           </div>
           <div className='swapBody'>
             <CurrencyField
               field="input"
+              tokenLabel="You Pay"
               tokenName="WETH"
               getSwapPrice={getSwapPrice}
               signer={signer}
@@ -181,6 +181,7 @@ function App() {
 
             <CurrencyField
               field="output"
+              tokenLabel="You Recieve"
               tokenName="UNI"
               value={outputAmount}
               signer={signer}

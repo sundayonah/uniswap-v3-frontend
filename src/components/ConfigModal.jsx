@@ -66,17 +66,21 @@ const ConfigModal = (props) => {
                     </div>
                     <div className="row">
                         <div className="fieldContainer">
-                            <button className="autoButton"
-                                onClick={e => props.setSlippageAmount(2.0)}>Auto</button>
+                            <button 
+                              className="autoButton"
+                              onClick={e => props.setSlippageAmount(2.0)}
+                                >
+                                 Auto
+                            </button>
                             <input 
                                 className="inputField"
                                 placeholder="2.0"
                                 value={props.slippageAmount}
                                 onChange={e => props.setSlippageAmount(e.target.value)}
                             />
-                            <div className="inputFieldUnitsContainer">
                                 <span>%</span>
-                            </div>
+                            {/* <div className="inputFieldUnitsContainer">
+                            </div> */}
                         </div>
                     </div>
                     <div className="row">
@@ -88,9 +92,9 @@ const ConfigModal = (props) => {
                                 value={props.deadlineMinutes}
                                 onChange={e => props.setDeadlineMinutes(e.target.value)}
                             />
-                            <div className="inputFieldUnitsContainer">
                                 <span className="unitMinute">minutes</span>
-                            </div>
+                            {/* <div className="inputFieldUnitsContainer">
+                            </div> */}
                         </div>
                     </div>
                 </div>

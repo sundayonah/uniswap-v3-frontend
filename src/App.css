@@ -1,6 +1,7 @@
 .App {
   text-align: center;
-  background-color: #e3eef3;
+  background-color: rgb(3, 3, 9);
+
   min-height: 100vh;
 }
 
@@ -65,7 +66,7 @@ body {
 }
 
 .swapContainer {
-  background-color: rgb(203, 231, 240);
+  background-color: transparent;
   width: 440px;
   height: 350px;
   margin: 0 auto;
@@ -81,11 +82,12 @@ body {
 }
 
 .swapText {
-  color: #000;
+  color: #fff;
   font-size: 20px;
 }
 
 .gearContainer {
+  color: #fff;
   float: right;
   font-size: 22px;
   cursor: pointer;
@@ -93,50 +95,6 @@ body {
 
 /******************************************************************************/
 /* Currency Input */
-.currencyInput {
-  background-color: rgb(217, 236, 242);
-  margin: 10px !important;
-  padding: 10px;
-  border-radius: 20px;
-}
-.currencyInput:hover {
-  border-color: #65cdee !important;
-  border: 1px solid;
-}
-::placeholder {
-  opacity: 0.25;
-}
-.numberContainer {
-  text-align: left;
-}
-.spinnerContainer {
-  height: 55px;
-  line-height: 55px;
-}
-.currencyInputField {
-  font-size: 28px;
-  display: inline-block;
-  width: 100%;
-  border: none;
-  background-color: rgb(217, 236, 242);
-}
-.tokenContainer {
-  text-align: right;
-}
-.tokenName {
-  font-size: 28px;
-  display: block;
-  color: #000;
-}
-.balanceContainer {
-  display: block;
-}
-.balanceAmount {
-  width: 100%;
-  font-size: 16px;
-  display: inline;
-  color: #000;
-}
 
 /******************************************************************************/
 /* Ratio */
@@ -144,6 +102,7 @@ body {
   text-align: left;
   margin-left: 10px;
   height: 28px;
+  color: #fff;
 }
 
 /******************************************************************************/

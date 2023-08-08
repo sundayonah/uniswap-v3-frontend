@@ -25,8 +25,10 @@ const CurrencyField =(props) => {
                     minLength = "1"
                     maxLength = "10"
                     />
+                  
                 )}
             </div>
+                    {/* <span className='tokenLabel'>{props.tokenLabel}</span> */}
             <div className="col-md-6 tokenContainer">
                     <button className="tokenSelectModalButton" onClick={() => setShowSelectModal(true)}>
                         {tokenName}
