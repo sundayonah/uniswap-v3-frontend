@@ -41,14 +41,14 @@
 //   console.log(currencyAmount);
 //   console.log(WETH);
 
-//   const options = {
-//     recipient: walletAddress,
-//     slippageTolerance: percentSlippage,
-//     deadline: Math.floor(Date.now() / 1000) + 60 * 10,
-//     type: TradeType.EXACT_INPUT,
-//   };
+  // const options = {
+  //   recipient: walletAddress,
+  //   slippageTolerance: percentSlippage,
+  //   deadline: Math.floor(Date.now() / 1000) + 60 * 10,
+  //   type: TradeType.EXACT_INPUT,
+  // };
 
-//   const route = await router.route(currencyAmount, UNI, options);
+  // const route = await router.route(currencyAmount, UNI, options);
 
 // const transaction = {
 //   data: route.methodParameters?.calldata,
@@ -81,7 +81,7 @@
 // };
 
 
-const { AlphaRouter } = require('@uniswap/smart-order-router');
+const { AlphaRouter, SwapType } = require('@uniswap/smart-order-router');
 const {Token, CurrencyAmount, TradeType, Percent} = require('@uniswap/sdk-core');
 const {ethers, BigNumber} = require('ethers');
 const ERC20ABI = require('./abi.json');
@@ -125,42 +125,62 @@ const isApproved = async(walletAddress) => {
 }
 
 export const getPrice = async (inputAmount, slippageAmount, deadline, walletAddress, tokenIn, tokenOut) => { 
-    const from = tradeToken(tokenIn);
-    const to = tradeToken(tokenOut);
-    const approve = from.address;
-    const percentSlippage = new Percent(slippageAmount, 100);
-    const wei = ethers.utils.parseUnits(inputAmount.toString(), decimals0);
-    const currencyAmount = CurrencyAmount.fromRawAmount(from, JSBI.BigInt(wei));
+  const from = tradeToken(tokenIn);
+  const to = tradeToken(tokenOut);
+  const approve = from.address;
+  const percentSlippage = new Percent(slippageAmount, 10);
+  const wei = ethers.utils.parseUnits(inputAmount.toString(), decimals0);
+  const currencyAmount = CurrencyAmount.fromRawAmount(from, JSBI.BigInt(wei));
 
+  try {
+    // console.log('Before router.route:', currencyAmount, to, TradeType.EXACT_INPUT);
     const route = await router.route(
-        currencyAmount,
-        to,
-        TradeType.EXACT_INPUT,
-        {
-            recipient: walletAddress,
-            slippageTolerance: percentSlippage,
-            deadline: deadline,
-        }
-    )
+      currencyAmount,
+      to,
+      TradeType.EXACT_INPUT,
+      {
+        recipient: walletAddress,
+        slippageTolerance: percentSlippage,
+        deadline: deadline,
+        type: SwapType.SWAP_ROUTER_02
+      }
+    );
+
+    // const options = {
+    //   recipient: walletAddress,
+    //   slippageTolerance: percentSlippage,
+    //   deadline: Math.floor(Date.now() / 1000) + 60 * 10,
+    //   type: TradeType.EXACT_INPUT,
+    // };
+  
+    // const route = await router.route(currencyAmount, to, options);
+
+    // console.log('After router.route:', route);
 
     const transaction = {
-        data: route.methodParameters.calldata,
-        to: V3_SWAP_ROUTER_ADDRESS,
-        value: BigNumber.from(route.methodParameters.value),
-        from: walletAddress,
-        gasPrice: BigNumber.from(route.gasPriceWei),
-        gasLimit: ethers.utils.hexlify(1000000)
-    }
+      data: route?.methodParameters?.calldata,
+      to: V3_SWAP_ROUTER_ADDRESS,
+      value: route?.methodParameters?.value,
+      from: walletAddress,
+      gasPrice: route?.gasPriceWei,
+      gasLimit: ethers.utils.hexlify(500000)
+    };
+    
+    const quoteAmountOut = route?.quote?.toFixed(6);
 
-    const quoteAmountOut = route.quote.toFixed(6);
     const ratio = (inputAmount / quoteAmountOut ).toFixed(3);
 
     return [
-        transaction,
-        quoteAmountOut,
-        ratio
-    ]
-}
+      transaction,
+      quoteAmountOut,
+      ratio,
+    ];
+  } catch (error) {
+    // console.error('Error in getPrice:', error);
+    throw error;
+  }
+};
+
 
 export const runSwap = async (transaction, signer) => {
     const approvalAmount = ethers.utils.parseUnits('10', 18).toString();

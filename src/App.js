@@ -74,27 +74,49 @@ function App() {
     getWalletAddress()
   }
 
+  const isValidInput = (input) => {
+    // Use regular expression to check if the input is a valid number format
+    return /^[0-9]+(\.[0-9]*)?$/.test(input);
+  };
+  
   const getSwapPrice = (inputAmount) => {
-    if (inputAmount !== 0 && inputAmount !== null) {
-      setLoading(true);
-      getPrice(
-        inputAmount,
-        slippageAmount,
-        Math.floor(Date.now() / 1000 + (deadlineMinutes * 60)),
-        signerAddress,
-        tokenIn,
-        tokenOut
-      ).then(data => {
-        setTransaction(data[0]);
-        setOutputAmount(data[1]);
-        setRatio(data[2]);
+    if (isValidInput(inputAmount)) {
+      const inputAmountNumber = parseFloat(inputAmount);
+      
+      if (!isNaN(inputAmountNumber)) {
+        setLoading(true);
+        
+        // Convert the input amount to a string with fixed number of decimal places
+        const formattedInputAmount = inputAmountNumber.toFixed(6);
+        
+        getPrice(
+          formattedInputAmount,
+          slippageAmount,
+          Math.floor(Date.now() / 1000 + (deadlineMinutes * 60)),
+          signerAddress,
+          tokenIn,
+          tokenOut
+        ).then(data => {
+          setTransaction(data[0]);
+          setOutputAmount(data[1]);
+          setRatio(data[2]);
+          setLoading(false);
+        });
+      } else {
+        // Handle case where input is not a valid number
+        console.error('Invalid input format');
+        setOutputAmount('');
+        setRatio(''); 
         setLoading(false);
-      })
+      }
     } else {
-      setOutputAmount(0);
+      // Handle case where input doesn't match the valid format
+      console.error('Invalid input format');
+      setOutputAmount('');
+      setRatio(''); 
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="App">
@@ -198,9 +220,6 @@ function App() {
       </div>
 
     </div>
-
-
-
   )
 }
 
