@@ -1,6 +1,8 @@
 import '../styles/CurrencyField.css'
 import React, { useState } from "react";
 import TokenSelectModal from './TokenSelectModal';
+// import img1 from '/public/assets/uniswap.png';
+
 
 const CurrencyField =(props) => {
     const [showSelectModal, setShowSelectModal] = useState(undefined);
@@ -13,22 +15,22 @@ const CurrencyField =(props) => {
     return (
         <div className="row currencyInput">
             <div className="col-md-6 numberContainer"> 
+            <span className="tokenLabel">You {props.field === 'input' ? 'Pay' : 'Receive'}</span>
                 {props.loading && props.value !== null ? (
                     <div className="spinnerContainer">
                         <props.spinner />
                     </div>
                 ) : (
-                    <input className="currencyInputField"
+               <input className="currencyInputField"
                     placeholder="0"
                     value={props.value}
                     onChange={e => (props.field === 'input' ? getPrice(e.target.value) : null)}
                     minLength = "1"
                     maxLength = "10"
-                    />
-                  
+                />
                 )}
             </div>
-                    {/* <span className='tokenLabel'>{props.tokenLabel}</span> */}
+                {/* <span className='tokenLabel'>{props.tokenLabel}</span> */}
             <div className="col-md-6 tokenContainer">
                     <button className="tokenSelectModalButton" onClick={() => setShowSelectModal(true)}>
                         {tokenName}
@@ -47,5 +49,4 @@ const CurrencyField =(props) => {
         </div>
     )
 }
-
 export default CurrencyField;

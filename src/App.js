@@ -172,21 +172,23 @@ function App() {
           <div className='swapBody'>
             <CurrencyField
               field="input"
-              tokenLabel="You Pay"
               tokenName="WETH"
               getSwapPrice={getSwapPrice}
               signer={signer}
               balance={balanceTokenIn}
               tokenIn={setTokenIn} />
 
+                {/* <div className="arrowContainer">
+                <span className="arrow">↓</span>
+                </div> */}
+
             <CurrencyField
               field="output"
-              tokenLabel="You Recieve"
               tokenName="UNI"
               value={outputAmount}
               signer={signer}
               balance={balanceTokenOut}
-              spinner={BeatLoader}
+              spinner={() => <BeatLoader color="white" />}
               loading={loading}
               tokenOut={setTokenOut} />
           </div>

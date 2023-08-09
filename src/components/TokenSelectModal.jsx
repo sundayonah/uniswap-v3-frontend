@@ -20,7 +20,7 @@ const TokenSelectModal = (props) => {
 
                 <div className="titleHead">
                     <h4 className="titleHeaderSelect">Select a token</h4>
-                    <h4  onClick={props.onClose} className="titleHeaderSelect close">X</h4>
+                    <h4  onClick={props.onClose} className="titleHeaderSelect close">✖</h4>
                 </div>
 
                 <div className="row">

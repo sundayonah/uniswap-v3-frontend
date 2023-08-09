@@ -1,7 +1,6 @@
 .App {
   text-align: center;
   background-color: rgb(3, 3, 9);
-
   min-height: 100vh;
 }
 
@@ -62,13 +61,15 @@ body {
 /* Swap Container */
 .appBody {
   height: 100%;
-  padding-top: 80px;
+  padding-top: 100px;
+  /* position: relative; */
+  display: flex;
 }
 
 .swapContainer {
   background-color: transparent;
   width: 440px;
-  height: 350px;
+  height: 400px;
   margin: 0 auto;
   top: 50%;
   border-radius: 24px;
@@ -78,7 +79,7 @@ body {
 
 .swapHeader {
   text-align: left;
-  padding: 4px 20px 0px 20px;
+  padding: 4px 20px 5px 20px;
 }
 
 .swapText {
@@ -95,6 +96,25 @@ body {
 
 /******************************************************************************/
 /* Currency Input */
+.arrowContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(22, 28, 24);
+  width: 24px;
+  height: 24px;
+  border-radius: 20%;
+  border: 2px solid rgb(3, 3, 9);
+}
+.arrow {
+  font-size: 18px;
+  color: white;
+}
 
 /******************************************************************************/
 /* Ratio */
